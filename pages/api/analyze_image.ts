@@ -2,7 +2,7 @@ import chroma from "chroma-js";
 import formidable from "formidable";
 import { cp, rm } from "fs/promises";
 import jimp from "jimp";
-import _, { orderBy } from "lodash";
+import { orderBy } from "lodash";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { uniqWith } from "rambda";
 import { createClient } from "redis";
@@ -11,9 +11,9 @@ import {
   colorAverage,
   colorStdev,
   distance,
-  randomLabColor,
-} from "../logic/color";
-import { percentalizer } from "../logic/mainLogic";
+  randomLabColor
+} from "../../logic/color";
+import { percentalizer } from "../../logic/mainLogic";
 
 const NUM_CLUSTERS = 16;
 const RESIZE_DIM = 100;

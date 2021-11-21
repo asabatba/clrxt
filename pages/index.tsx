@@ -1,13 +1,14 @@
 import chroma from "chroma-js";
 import type { NextPage } from "next";
 import Head from "next/head";
+import Image from "next/image";
 import { sortBy } from "rambda";
 import {
   ChangeEventHandler,
   FormEventHandler,
   FunctionComponent,
   useMemo,
-  useState,
+  useState
 } from "react";
 import { Bubble } from "react-chartjs-2";
 import { style } from "typestyle";
@@ -15,6 +16,7 @@ import { CSSProperties } from "typestyle/lib/types";
 import type { Cluster, ProcessOutput } from "./api/analyze_image";
 
 const column: CSSProperties = { display: "flex", flexDirection: "column" };
+const row: CSSProperties = { display: "flex", flexDirection: "row" };
 
 const FileUploader: FunctionComponent<{ setData: (d: any) => void }> = ({
   setData,
@@ -48,7 +50,6 @@ const FileUploader: FunctionComponent<{ setData: (d: any) => void }> = ({
 
   return (
     <div>
-      <h1>color extractor</h1>
       <form
         action="/api/analyze_image"
         encType="multipart/form-data"
@@ -103,7 +104,6 @@ const ImgAnalysis: FunctionComponent<{ data: ProcessOutput }> = ({ data }) => {
         fontFamily: "monospace",
       })}
     >
-      <img src={data.img} style={{ maxHeight: 64, maxWidth: 64 }} />
       <div>c1 - c2 - count - contrast - colordiff - distab - hipscore</div>
       {data.combos.map(
         ({
@@ -287,7 +287,10 @@ const Palette: FunctionComponent<{ clusters: Cluster[] }> = ({ clusters }) => {
   return (
     <div className={style({ display: "flex", flexDirection: "row" })}>
       {clusters.map((c) => (
-        <div className={style({ padding: "1rem", backgroundColor: c.hex })}>
+        <div
+          key={c.hex}
+          className={style({ padding: "1rem", backgroundColor: c.hex })}
+        >
           {c.hex}
         </div>
       ))}
@@ -308,7 +311,21 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={style(styles.main, { fontFamily: "monospace" })}>
-        <FileUploader setData={setData} />
+        <h1>color extractor</h1>
+        <div className={style(row, { alignItems: "center" })}>
+          <FileUploader setData={setData} />
+          <div className={style({ width: "2rem" })} />
+          {_data && (
+            <Image
+              src={_data.img}
+              layout="fixed"
+              width={64}
+              height={64}
+              // className={style({ height: 64, width: 64 })}
+              alt="uploaded img"
+            />
+          )}
+        </div>
         {_data && (
           <>
             <div className={style({ width: 800, height: 400 })}>
